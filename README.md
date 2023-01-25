@@ -26,3 +26,14 @@ tar xjf fichier.tar.bz2
 tar xvfz fichier.tar.gz
 tar xf fichier.tar.xz
 ```
+Check with FASTQC again:
+```
+fastqc BTR250-R1-trimmed.fastq.gz
+```
+Check the optimal kmer size for assembly:
+```
+kmergenie -t 6 BTR250-R1-trimmed.fastq.gz
+```
+
+# Assembly
+See details in scripts for SPAdes and MEGAHIT
