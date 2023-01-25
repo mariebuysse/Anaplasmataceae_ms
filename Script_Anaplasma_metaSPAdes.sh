@@ -27,8 +27,8 @@ reads_ech_list="BTR250 ORP110"
 for reads_ech in $reads_ech_list
 do
 
-scp $path_to_project/$reads_ech-R1-trimmed.fastq.gz $path_to_scratch
-scp $path_to_project/$reads_ech-R2-trimmed.fastq.gz $path_to_scratch
+scp $path_to_project/databrut/$reads_ech-R1-trimmed.fastq.gz $path_to_scratch
+scp $path_to_project/databrut/$reads_ech-R2-trimmed.fastq.gz $path_to_scratch
 
 ## assemblage SPAdes
 module load bioinfo/SPAdes/3.15.3
