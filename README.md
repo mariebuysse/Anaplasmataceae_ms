@@ -37,3 +37,16 @@ kmergenie -t 6 BTR250-R1-trimmed.fastq.gz
 
 # Assembly
 See details in scripts for SPAdes and MEGAHIT
+
+# Check quality assembly
+With QUAST:
+```
+quast.py *.fa -o ../2.Quality_assembly/QUAST_RESULTS_MEGAHIT
+```
+
+With Bandage:
+```
+module load bioinfo/MEGAHIT/1.2.9
+megahit_toolkit contig2fastg 21 k21.contigs.fa > BTR250_k21.fastg
+megahit_toolkit contig2fastg 77 k77.contigs.fa > BTR250_k77.fastg
+```
