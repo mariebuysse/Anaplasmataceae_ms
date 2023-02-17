@@ -41,7 +41,7 @@ See details in scripts for SPAdes and MEGAHIT
 # Check quality assembly
 With QUAST:
 ```
-quast.py *.fa -o ../2.Quality_assembly/QUAST_RESULTS_MEGAHIT
+quast.py *.fa -o ../2.Quality_assembly/QUAST_RESULTS_metaMEGAHIT
 ```
 ```
 Assembly                    BRT250-final.contigs  ORP110-final.contigs
