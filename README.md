@@ -78,3 +78,9 @@ megahit_toolkit contig2fastg 77 k77.contigs.fa > BTR250_k77.fastg
 
 # Binning
 Test binning on metaMEGAHIT on BTR and ORP final.contigs.fa with CONCOCT coupled with anvi'o taxonomy tools - in interactive mode (see scripts)
+
+The clustering_merged CSV file produced by CONCOCT needed to be exported in a tabular-delimited TEXT file. The bins' names had to be renamed to match the requirements of anvi'o :
+```
+awk '$2="bin"$2 {print}' bins-to-format.txt > bins-renamed.txt
+```
+The bins-renamed.txt file had to be transformed again to correspond to a tabular-delimited TEXT file, called bins.txt hereafter.
