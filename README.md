@@ -86,3 +86,28 @@ awk '$2="bin"$2 {print}' bins-to-format.txt > bins-renamed.txt
 The `bins-renamed.txt` file had to be transformed again to correspond to a tabular-delimited TEXT file, called `bins.txt` hereafter.
 
 Results of comparison meta and filtered: meta then binning CONCOCT-anvio
+
+```
+Assembly                    BTR-bin23ANA-contigs  ORP-bin116ANA-contigs
+# contigs (>= 0 bp)         81                    117                  
+# contigs (>= 1000 bp)      81                    117                  
+# contigs (>= 5000 bp)      47                    62                   
+# contigs (>= 10000 bp)     32                    42                   
+# contigs (>= 25000 bp)     16                    12                   
+# contigs (>= 50000 bp)     5                     0                    
+Total length (>= 0 bp)      1176232               1187243              
+Total length (>= 1000 bp)   1176232               1187243              
+Total length (>= 5000 bp)   1122570               1068187              
+Total length (>= 10000 bp)  1012570               917159               
+Total length (>= 25000 bp)  730933                441829               
+Total length (>= 50000 bp)  364916                0                    
+# contigs                   81                    117                  
+Largest contig              112391                49298                
+Total length                1176232               1187243              
+GC (%)                      50.62                 49.25                
+N50                         30968                 20180                
+N75                         18795                 11467                
+L50                         11                    19                   
+L75                         24                    40                   
+# N's per 100 kbp           0.00                  0.00
+```
