@@ -84,3 +84,5 @@ The `clustering_merged` CSV file produced by CONCOCT needed to be exported in a 
 awk '$2="bin"$2 {print}' bins-to-format.txt > bins-renamed.txt
 ```
 The `bins-renamed.txt` file had to be transformed again to correspond to a tabular-delimited TEXT file, called `bins.txt` hereafter.
+
+Results of comparison meta and filtered: meta then binning CONCOCT-anvio
