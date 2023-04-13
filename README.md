@@ -116,17 +116,43 @@ L75                         24                    40
 ```
 orthofinder -f ./FAA_Rlusi -t 5 -a 1 -S diamond ## FAA_Rlusi being a directory including .faa files of R. lusitaniae MAGs
 
+#Ehrlichia
 # On RStudio
-ortho_tab <- read.delim("GeneCount_Rlusi.tab") 
+ortho_tab <- read.table("Ehr_GeneCount.txt", sep="\t", header=TRUE, fill=TRUE) 
 ### list of orthologs per each organism in the dataset
-RlusiOerra <- subset(ortho_tab, ortho_tab$RlusiOerra>0)
-RlusiOerra_list <- RlusiOerra$Orthogroup
-RlusiOmari <- subset(ortho_tab, ortho_tab$RlusiOmari>0)
-RlusiOmari_list <- RlusiOmari$Orthogroup
-RlusiOmoub <- subset(ortho_tab, ortho_tab$RlusiOmoub>0)
-RlusiOmoub_list <- RlusiOmoub$Orthogroup
-Orthologs <- list(RlusiOerra = RlusiOerra_list, RlusiOmoub = RlusiOmoub_list, RlusiOmari = RlusiOmari_list) ## create a list of lists
+Acaj <- subset(ortho_tab, ortho_tab$Acaj>0)
+Acaj_list <- Acaj$Orthogroup
+Ehrcani <- subset(ortho_tab, ortho_tab$Ehrcani>0)
+Ehrcani_list <- Ehrcani$Orthogroup
+Ehrchaff <- subset(ortho_tab, ortho_tab$Ehrchaff>0)
+Ehrchaff_list <- Ehrchaff$Orthogroup
+Ehrmuri <- subset(ortho_tab, ortho_tab$Ehrmuri>0)
+Ehrmuri_list <- Ehrmuri$Orthogroup
+Ehrrumi <- subset(ortho_tab, ortho_tab$Ehrrumi>0)
+Ehrrumi_list <- Ehrrumi$Orthogroup
+Orthologs <- list(Acaj = Acaj_list, Ehrcani = Ehrcani_list, Ehrchaff = Ehrchaff_list, Ehrmuri = Ehrmuri_list, Ehrrumi = Ehrrumi_list) ## create a list of lists
+
 library(VennDiagram)
 set.seed(1)
-venn.diagram(Orthologs, filename="Rlusi_comparison.png", imagetype = "png", height=2000, width=2000, cex=1, cat.cex=0.8, fill=c("blue", "green", "yellow"), col="black", lwd=2, fontfamily="Ubuntu", cat.fontfamily="Ubuntu", cat.dist=0.25) # change height, width, color 
+venn.diagram(Orthologs, filename="Ehr_comparison.png", imagetype = "png", height=2000, width=2000, cex=0.8, cat.cex=0.8, fill=c("#22780F", "#CECECE", "#798081","#C1BFB1", "#BBACAC"), col="black", lwd=1, cat.dist=0.25) # change height, width, color 
+
+#Anaplasma
+# On RStudio
+ortho_tab <- read.table("Anap_GeneCount.txt", sep="\t", header=TRUE, fill=TRUE) 
+### list of orthologs per each organism in the dataset
+Amargi <- subset(ortho_tab, ortho_tab$Amargi>0)
+Amargi_list <- Amargi$Orthogroup
+Aphago <- subset(ortho_tab, ortho_tab$Aphago>0)
+Aphago_list <- Aphago$Orthogroup
+Aplaty <- subset(ortho_tab, ortho_tab$Aplaty>0)
+Aplaty_list <- Aplaty$Orthogroup
+BTR250 <- subset(ortho_tab, ortho_tab$BTR250>0)
+BTR250_list <- BTR250$Orthogroup
+ORP110 <- subset(ortho_tab, ortho_tab$ORP110>0)
+ORP110_list <- ORP110$Orthogroup
+Orthologs <- list(ORP110 = ORP110_list, Amargi = Amargi_list, Aphago = Aphago_list, Aplaty = Aplaty_list, BTR250 = BTR250_list) ## create a list of lists
+
+library(VennDiagram)
+set.seed(1)
+venn.diagram(Orthologs, filename="Anap_comparison.png", imagetype = "png", height=2000, width=2000, cex=0.8, cat.cex=0.8, fill=c("#CF0A1D", "#CECECE", "#798081","#C1BFB1","#318CE7"), col="black", lwd=1, cat.dist=0.25) # change height, width, color 
 ```
