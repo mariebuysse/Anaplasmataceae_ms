@@ -111,3 +111,22 @@ L50                         11                    19
 L75                         24                    40                   
 # N's per 100 kbp           0.00                  0.00
 ```
+
+# Venn diagram 
+```
+orthofinder -f ./FAA_Rlusi -t 5 -a 1 -S diamond ## FAA_Rlusi being a directory including .faa files of R. lusitaniae MAGs
+
+# On RStudio
+ortho_tab <- read.delim("GeneCount_Rlusi.tab") 
+### list of orthologs per each organism in the dataset
+RlusiOerra <- subset(ortho_tab, ortho_tab$RlusiOerra>0)
+RlusiOerra_list <- RlusiOerra$Orthogroup
+RlusiOmari <- subset(ortho_tab, ortho_tab$RlusiOmari>0)
+RlusiOmari_list <- RlusiOmari$Orthogroup
+RlusiOmoub <- subset(ortho_tab, ortho_tab$RlusiOmoub>0)
+RlusiOmoub_list <- RlusiOmoub$Orthogroup
+Orthologs <- list(RlusiOerra = RlusiOerra_list, RlusiOmoub = RlusiOmoub_list, RlusiOmari = RlusiOmari_list) ## create a list of lists
+library(VennDiagram)
+set.seed(1)
+venn.diagram(Orthologs, filename="Rlusi_comparison.png", imagetype = "png", height=2000, width=2000, cex=1, cat.cex=0.8, fill=c("blue", "green", "yellow"), col="black", lwd=2, fontfamily="Ubuntu", cat.fontfamily="Ubuntu", cat.dist=0.25) # change height, width, color 
+```
