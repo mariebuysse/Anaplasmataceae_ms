@@ -156,3 +156,9 @@ library(VennDiagram)
 set.seed(1)
 venn.diagram(Orthologs, filename="Anap_comparison.png", imagetype = "png", height=2000, width=2000, cex=0.8, cat.cex=0.8, fill=c("#CF0A1D", "#CECECE", "#798081","#C1BFB1","#318CE7"), col="black", lwd=1, cat.dist=0.25) # change height, width, color 
 ```
+
+# ANI
+With pyani's script `average_nucleotide_identity.py` (https://github.com/widdowquinn/pyani/blob/master/README_v_0_2_x.md)
+```
+average_nucleotide_identity.py -i Genomes_fastANI/ -o pyani_results -g
+```
