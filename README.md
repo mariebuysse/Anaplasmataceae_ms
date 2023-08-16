@@ -7,12 +7,12 @@ For each sample, a dataset of paired-end reads is available, each representing a
 
 # Step 1. Retrieving new Anaplasmataceae's MAGs
 ## 1.1. *De novo* assembly from the short reads' datasets: `ORP110` and `BTR250`
-#### 1.1.1. Trimming
+### 1.1.1. Trimming
 ```
 atropos -T 4 -a file:BTR250-adaptersF -A file:BTR250-adaptersR -o BTR250-R1-trimmed.fastq.gz -p BTR250-R2-trimmed.fastq.gz -pe1 BTR250-R1.fastq.gz -pe2 BTR250-R2.fastq.gz
 ```
-#### 1.1.2. Assembly
-#### 1.1.2. Binning 
+### 1.1.2. Assembly
+### 1.1.2. Binning 
 ## 1.2. *De novo* assembly from the long reads' dataset: `AcajP1`
 ## 1.3. Quality check
 ## 1.4. Annotation 
@@ -20,7 +20,7 @@ atropos -T 4 -a file:BTR250-adaptersF -A file:BTR250-adaptersR -o BTR250-R1-trim
 # Step 2. MAGs' description and comparison with others genomes of Anaplasmataceae
 ## 2.1. Phylogenomics 
 ## 2.2. Gene content and nucleic sequences' similarities
-#### Venn diagram 
+### Venn diagram 
 ```
 orthofinder -f ./FAA_Rlusi -t 5 -a 1 -S diamond ## FAA_Rlusi being a directory including .faa files of R. lusitaniae MAGs
 
@@ -65,7 +65,7 @@ set.seed(1)
 venn.diagram(Orthologs, filename="Anap_comparison.png", imagetype = "png", height=2000, width=2000, cex=0.8, cat.cex=0.8, fill=c("#CF0A1D", "#CECECE", "#798081","#C1BFB1","#318CE7"), col="black", lwd=1, cat.dist=0.25) # change height, width, color 
 ```
 
-#### ANI
+### ANI
 With pyani's script `average_nucleotide_identity.py` (https://github.com/widdowquinn/pyani/blob/master/README_v_0_2_x.md)
 ```
 average_nucleotide_identity.py -i Genomes_fastANI/ -o pyani_results -g
