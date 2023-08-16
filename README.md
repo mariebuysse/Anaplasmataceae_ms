@@ -1,118 +1,26 @@
-# Anaplasma_analyses
+# "Emerging anaplasmosis and ehrlichiosis in the Amazon biome", Buysse et al.
+# Bioinformatic analyses and scripts
 
-#### Raw data
-```
-nas3:/data3/projects/GUYAVEC/databrut
-```
-Echantillons : BTR250 & ORP110
+For this study, we aimed to retrieve the MAG (Metagenome-Assembled Genome) of three Anaplasmataceae detected in humans, sloths, and ticks. We characterized the newly obtained MAGs, then compared them to other Anaplasmataceae' genomes, especially in the search of homologs of virulence factors.
 \
-Run : flow cell SP en paired-end 150 nt
+For each sample, a dataset of paired-end reads is available, each representing an individual metagenome. Details about the experimental and sequencing methods are available in the associated manuscript. Following analyses are based on these reads' datasets, referred as `ORP110` (reads from **X**), `BTR250` (reads from **X**), and `AcajP1` (reads from **X**).
 
-# Quality check
-With FASTQC, with control of adapters:
-```
-fastqc BTR250-R1.fastq.gz
-```
-If trimming needed: 
+# Step 1. Retrieving new Anaplasmataceae's MAGs
+## 1.1. *De novo* assembly from the short reads' datasets: `ORP110` and `BTR250`
+#### 1.1.1. Trimming
 ```
 atropos -T 4 -a file:BTR250-adaptersF -A file:BTR250-adaptersR -o BTR250-R1-trimmed.fastq.gz -p BTR250-R2-trimmed.fastq.gz -pe1 BTR250-R1.fastq.gz -pe2 BTR250-R2.fastq.gz
 ```
-If need to decompress:
-```
-gzip -d fichier.gz
-tar -xvf fichier.tar
-unzip fichier.zip
-tar xjf fichier.tar.bz2
-tar xvfz fichier.tar.gz
-tar xf fichier.tar.xz
-```
-Check with FASTQC again:
-```
-fastqc BTR250-R1-trimmed.fastq.gz
-```
-Check the optimal kmer size for assembly:
-```
-kmergenie -t 6 BTR250-R1-trimmed.fastq.gz
-```
+#### 1.1.2. Assembly
+#### 1.1.2. Binning 
+## 1.2. *De novo* assembly from the long reads' dataset: `AcajP1`
+## 1.3. Quality check
+## 1.4. Annotation 
 
-# Assembly
-See details in scripts for SPAdes and MEGAHIT
-
-# Check quality assembly
-With QUAST:
-```
-quast.py *.fa -o ../2.Quality_assembly/QUAST_RESULTS_metaMEGAHIT
-```
-```
-Assembly                    BRT250-final.contigs  ORP110-final.contigs
-# contigs (>= 0 bp)         1636409               1168235             
-# contigs (>= 1000 bp)      386703                488189              
-# contigs (>= 5000 bp)      150203                165797              
-# contigs (>= 10000 bp)     64913                 61294               
-# contigs (>= 25000 bp)     7886                  4858                
-# contigs (>= 50000 bp)     448                   121                 
-Total length (>= 0 bp)      2720728327            2752617663          
-Total length (>= 1000 bp)   2290459576            2494217607          
-Total length (>= 5000 bp)   1714251326            1702229590          
-Total length (>= 10000 bp)  1108439149            968353092           
-Total length (>= 25000 bp)  263096035             153286388           
-Total length (>= 50000 bp)  26922741              6975055             
-# contigs                   561790                631882              
-Largest contig              128915                102827              
-Total length                2411301713            2596898192          
-GC (%)                      39.91                 40.76               
-N50                         9078                  7456                
-N75                         4320                  3694                
-L50                         75123                 99649               
-L75                         170458                222791              
-# N's per 100 kbp           0.00                  0.00
-```
-Results: let's try without reads from Eukaryota (remove with Kraken) because of the low size of largest contig
-
-With Bandage:
-```
-module load bioinfo/MEGAHIT/1.2.9
-megahit_toolkit contig2fastg 21 k21.contigs.fa > BTR250_k21.fastg
-megahit_toolkit contig2fastg 77 k77.contigs.fa > BTR250_k77.fastg
-```
-
-# Binning
-Test binning on metaMEGAHIT on BTR and ORP final.contigs.fa with CONCOCT coupled with anvi'o taxonomy tools - in interactive mode (see scripts)
-
-The `clustering_merged` CSV file produced by CONCOCT needed to be exported in a tabular-delimited TEXT file. The bins' names had to be renamed to match the requirements of anvi'o :
-```
-awk '$2="bin"$2 {print}' bins-to-format.txt > bins-renamed.txt
-```
-The `bins-renamed.txt` file had to be transformed again to correspond to a tabular-delimited TEXT file, called `bins.txt` hereafter.
-
-Results of comparison meta and filtered: meta then binning CONCOCT-anvio
-
-```
-Assembly                    BTR-bin23ANA-contigs  ORP-bin116ANA-contigs
-# contigs (>= 0 bp)         81                    117                  
-# contigs (>= 1000 bp)      81                    117                  
-# contigs (>= 5000 bp)      47                    62                   
-# contigs (>= 10000 bp)     32                    42                   
-# contigs (>= 25000 bp)     16                    12                   
-# contigs (>= 50000 bp)     5                     0                    
-Total length (>= 0 bp)      1176232               1187243              
-Total length (>= 1000 bp)   1176232               1187243              
-Total length (>= 5000 bp)   1122570               1068187              
-Total length (>= 10000 bp)  1012570               917159               
-Total length (>= 25000 bp)  730933                441829               
-Total length (>= 50000 bp)  364916                0                    
-# contigs                   81                    117                  
-Largest contig              112391                49298                
-Total length                1176232               1187243              
-GC (%)                      50.62                 49.25                
-N50                         30968                 20180                
-N75                         18795                 11467                
-L50                         11                    19                   
-L75                         24                    40                   
-# N's per 100 kbp           0.00                  0.00
-```
-
-# Venn diagram 
+# Step 2. MAGs' description and comparison with others genomes of Anaplasmataceae
+## 2.1. Phylogenomics 
+## 2.2. Gene content and nucleic sequences' similarities
+#### Venn diagram 
 ```
 orthofinder -f ./FAA_Rlusi -t 5 -a 1 -S diamond ## FAA_Rlusi being a directory including .faa files of R. lusitaniae MAGs
 
@@ -157,8 +65,10 @@ set.seed(1)
 venn.diagram(Orthologs, filename="Anap_comparison.png", imagetype = "png", height=2000, width=2000, cex=0.8, cat.cex=0.8, fill=c("#CF0A1D", "#CECECE", "#798081","#C1BFB1","#318CE7"), col="black", lwd=1, cat.dist=0.25) # change height, width, color 
 ```
 
-# ANI
+#### ANI
 With pyani's script `average_nucleotide_identity.py` (https://github.com/widdowquinn/pyani/blob/master/README_v_0_2_x.md)
 ```
 average_nucleotide_identity.py -i Genomes_fastANI/ -o pyani_results -g
 ```
+
+## 2.3. Detection of virulence factors 
