@@ -109,11 +109,13 @@ Results are:
 
 ```
 
-## 1.4. Annotation 
+## 1.4. Annotation and pseudogene identification
 The MAGs were annotated using `Prokka` (https://github.com/tseemann/prokka, Seemann T. (2014) Prokka: rapid prokaryotic genome annotation. Bioinformatics. doi: 10.1093/bioinformatics/btu153).
 ```
 prokka $ech-MAG.fasta --locustag $ech --prefix $ech --outdir PROKKA-$ech --rfam --compliant
 ````
+
+PSEUDOFINDER
 
 ## 1.5. Genome visualization
 MAG representation was performed using `CGview` (https://github.com/paulstothard/cgview, Stothard P., Wishart D.S. (2005) Circular genome visualization and exploration using CGView. Bioinformatics. doi: 10.1093/bioinformatics/bti054):
