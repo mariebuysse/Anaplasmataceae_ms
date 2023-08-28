@@ -14,7 +14,6 @@ Hereafter,
 ```
 ech="Sparouine PetitSaut Matoury"
 ```
-\
 
 # Step 1. Retrieving new Anaplasmataceae's MAGs
 ## 1.1. *De novo* assembly from the short reads' datasets: `Sparouine` and `PetitSaut`
@@ -22,13 +21,13 @@ ech="Sparouine PetitSaut Matoury"
 ```
 atropos -T 4 -a file:$ech-adaptersF -A file:$ech-adaptersR -o $ech-R1-trimmed.fastq.gz -p $ech-R2-trimmed.fastq.gz -pe1 $ech-R1.fastq.gz -pe2 $ech-R2.fastq.gz
 ```
-\
+
 ### 1.1.2. Assembly
 Reads were assembled using MEGAHIT (https://github.com/voutcn/megahit, Li D., Liu C-M., Luo R., Sadakane K., and Lam T-W., (2015) MEGAHIT: An ultra-fast single-node solution for large and complex metagenomics assembly via succinct de Bruijn graph. Bioinformatics. doi: 10.1093/bioinformatics/btv033):
 ```
 megahit -1 $ech-R1-trimmed.fastq.gz -2 $ech-R2-trimmed.fastq.gz --k-list 21,59,77,99 -t 6 -o $ech-metaMEGAHIT
 ```
-\
+
 ### 1.1.3. Binning 
 *Anaplasma* MAGs were retrieved from assemblies using `CONCOCT` (https://github.com/BinPro/CONCOCT, Alneberg J., Smári Bjarnason B., de Bruijn I., Schirmer M., Quick J., Ijaz U.Z., Lahti L., Loman N.J., Andersson A.F., & Quince C., (2014) Binning metagenomic contigs by coverage and composition, Nature Methods. doi: 10.1038/nmeth.3103) and the `anvi'o` pipeline (https://anvio.org/, Eren A.M., Kiefl E., Shaiber A. et al., (2021) Community-led, integrated, reproducible multi-omics with anvi’o. Nature Microbiology. doi: 10.1038/s41564-020-00834-3). 
 First, the contigs were renamed to match the requirements of `anvi'o`. 
@@ -76,7 +75,6 @@ anvi-summarize -p $ech-PROFILE/PROFILE.db -c $ech-metaMEGAHIT.db -C bins -o $ech
 ```
 `$ech-SUMMARY` file (html format) was manually checked to identify the bin number assigned as *Anaplasma spp.*. No redundacy level required to refine the raw bins. 
 **After this step, the bins were considered as *Ca.* Anaplasma MAGs, designated as `Aspa-Sparouine` and `Aama-PetiSaut`.**
-\
 
 ## 1.2. *De novo* assembly from the long reads' dataset: `Matoury`
 *De novo* assembly of `Matoury` dataset was performed from long-reads (MinION, Oxford Nanopore) using `Flye` (https://github.com/fenderglass/Flye, M.K., D.M.B., B.B., A.G., M.R., S.B.S., K.K., J.Y., E.P., T.P.L.S. and P.A.P., (2020) metaFlye: scalable long-read metagenome assembly using repeat graphs, Nature Methods. doi:s41592-020-00971-x), as follows:
@@ -96,7 +94,7 @@ medaka_consensus -i $ech_porechopped_all.fq.gz -d assembly.fasta -m r941_min_fas
 The identification of the *Ca.* Ehrlichia cajennense MAG is based on the taxonomic assignation of the 16S rDNA sequence of a circular contig visualized with `Bandage` (https://rrwick.github.io/Bandage/, Wick R.R, Schultz M.B., Zobel J., Holt K.E. (2015) Bandage: Interactive visualization of de novo genome assemblies. Bioinformatics. doi: 10.1093/bioinformatics/btv383) (assignation based on the online NCBI BLAST tool). 
 
 **After this step, the contig is considered as *Ca.* Ehrlichia cajennense MAG, designated as `Ecaj-Matoury`.**
-\
+
 
 ## 1.3. Quality check
 Quality and multiple statistics were accessed using `miComplete` (https://pypi.org/project/micomplete/, Hugoson E., Lam W.T., Guy L. (2020) miComplete: weighted quality evaluation of assembled microbial genomes. Bioinformatics. doi: 10.1093/bioinformatics/btz664) and `Quast` (https://github.com/ablab/quast, Gurevich A., Saveliev V., Vyahhi N., Tesler G. (2013) QUAST: quality assessment tool for genome assemblies. Bioinformatics. doi: 10.1093/bioinformatics/btt086).
@@ -123,7 +121,7 @@ MAG representation was performed using `CGview` (https://github.com/paulstothard
 perl ~/Tools_starters/cgview_xml_builder.pl -sequence ./$ech.gbf -output $ech.xml -gc_skew F -gc_content F -size large-v2 -gene_decoration arc
 java -jar ~/Tools_starters/cgview.jar -i $ech.xml -o map_$ech.png -f png
 ```
-\
+
 
 # Step 2. MAGs' description and comparison with others genomes of Anaplasmataceae
 ## 2.1. Phylogenomics 
