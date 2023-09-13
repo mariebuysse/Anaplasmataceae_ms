@@ -116,6 +116,9 @@ prokka $ech-MAG.fasta --locustag $ech --prefix $ech --outdir PROKKA-$ech --rfam 
 ````
 
 PSEUDOFINDER
+```
+python3 /pseudofinder-1.0/pseudofinder.py annotate --genome <genbank file> --outprefix <prefix> --diamond -db <path to diamond db>
+```
 
 ## 1.5. Genome visualization
 MAG representation was performed using `CGview` (https://github.com/paulstothard/cgview, Stothard P., Wishart D.S. (2005) Circular genome visualization and exploration using CGView. Bioinformatics. doi: 10.1093/bioinformatics/bti054):
@@ -127,6 +130,38 @@ java -jar ~/Tools_starters/cgview.jar -i $ech.xml -o map_$ech.png -f png
 
 # Step 2. MAGs' description and comparison with others genomes of Anaplasmataceae
 ## 2.1. Phylogenomics 
+First, single-copy orthologs (SCO) were identified using OrthoFinder (https://github.com/davidemms/OrthoFinder, OrthoFinder: phylogenetic orthology inference for comparative genomics, Emms DM and Kelly S, Genome Biology, 2019, doi: 10.1186/s13059-019-1832-y) from a set of specimens' genomes chosen to study the phylogenetic relationships between the obtained Spiroplasma MAGs and other Spiroplasma representatives:
+```
+orthofinder -f ./OrthoFinder_genomes/ -t 4 -S blast ## OrthoFinder_genomes being a directory including all .faa files of specimens of interest
+```
+For each SCO, sequences were individually aligned using mafft (https://github.com/GSLBiotech/mafft, MAFFT multiple sequence alignment software version 7: improvements in performance and usability, Katoh K and Standley DM, Molecular Biology and Evolution, 2013 doi: 10.1093/molbev/mst010):
+```
+for file in /Single_Copy_Orthologue_Sequences/*
+do mafft "$file" > "$file"
+done
+```
+For each SCO, ambigious hypervariable regions were removed using trimAl (https://github.com/inab/trimal, trimAl: a tool for automated alignment trimming in large-scale phylogenetic analyses, Capella-Gutiérrez S, Silla-Martínez JM, and Gabaldón T, Bioinformatics, 2009, doi: 10.1093/bioinformatics/btp348):
+```
+cp ./Single_Copy_Orthologue_Sequences/*_align.fasta ./Single_Copy_Orthologue_Sequences_trimal/
+for file in /Single_Copy_Orthologue_Sequences_trimal/*
+do trimal -in "$file" -out "$file" -fasta -gt 1 -cons 50
+done
+```
+Then, all SCO sequences were concatenated using Amas (https://github.com/marekborowiec/AMAS, AMAS: a fast tool for alignment manipulation and computing of summary statistics, Borowiec ML, PeerJ, 2016, doi: 10.7717/peerj.1660) in a single file:
+```
+for file in /Single_Copy_Orthologue_Sequences_trimal/*
+do awk '/^>/{print ">organism" ++i; next}{print}' < "$file" > "${file%_align.fasta}_rename.fasta"
+done
+cp ./Single_Copy_Orthologue_Sequences_trimal/*_rename.fasta ./Single_Copy_Orthologue_Sequences_AMAS/
+AMAS.py concat -f fasta -d aa --in-files ./Single_Copy_Orthologue_Sequences_AMAS/*.fasta
+```
+Substitution models were evaluated using modeltest-ng (https://github.com/ddarriba/modeltest, ModelTest-NG: A new and scalable tool for the selection of DNA and protein evolutionary models, Darriba D, Posada D, Kozlov AM, Stamatakis A, Morel B, and Flouri T, Molecular Biology and Evolution, 2020, doi: 10.1093/molbev/msz189) in order to determinate the appropriate substitution model (according to AICc criterion) to use for the phylogenetic tree construction with RAxML (https://github.com/stamatak/standard-RAxML, RAxML version 8: a tool for phylogenetic analysis and post-analysis of large phylogenies, Stamatakis A, Bioinformatics, 2014, doi: 10.1093/bioinformatics/btu033):
+```
+modeltest-ng -i Spiro-human_concatenated.faa -p 12 -T raxml -d aa
+raxmlHPC-PTHREADS -T 8 -f a -s Spiro-human_concatenated.faa -n Spiro-phylo -m PROTGAMMAIJTT -x 1234 -# 1000 -p 1234
+```
+The phylogenetic tree was visualized and modified using figtree (<https://github.com/rambaut/figtree/>).
+
 ## 2.2. Gene content and nucleic sequences' similarities
 ### Venn diagram 
 ```
@@ -176,7 +211,7 @@ venn.diagram(Orthologs, filename="Anap_comparison.png", imagetype = "png", heigh
 ### ANI
 With pyani's script `average_nucleotide_identity.py` (https://github.com/widdowquinn/pyani/blob/master/README_v_0_2_x.md)
 ```
-average_nucleotide_identity.py -i Genomes_fastANI/ -o pyani_results -g
+average_nucleotide_identity.py -i Genomes_fastANI/ -o pyani_results -g ## Genomes_fastANI a directory containing MAGs and genomes of Anaplasmataceae to compare (.fasta)
 ```
 
 ## 2.3. Detection of virulence factors 
