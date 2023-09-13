@@ -215,3 +215,24 @@ average_nucleotide_identity.py -i Genomes_fastANI/ -o pyani_results -g ## Genome
 ```
 
 ## 2.3. Detection of virulence factors 
+The presence and completeness of genes involved in B vitamins (biotin B7, riboflavin B2, folate B9, pantothenic acid B3, nicotinic acid B3, pyroxidine B6, thiamine B1) and cofactors (FAD, CoA, NADP+) biosynthesis, in heme biosynthesis pathways and in virulence in Vertebrates (potential genes) were investigated by two complementary tools to increase detection of both (potential) functionnal and pseudogenized genes:
+1. Using OrthoFinder
+2. Using BLASTn, BLASTp, and tBLASTn. We also searched these genes in other Rickettsia to compare the presence and functionality patterns. For B vitamins and heme, we used queries from different endosymbionts (Rickettsia, Midichloria, Francisella-like endosymbionts, and Coxiella-like endosymbionts) found on available genomes (GenBank, NCBI). For potential virulence genes, we used queries from R. amblyommatis GAT-30V strain described in Yen et al. (2021) (10.1093/femspd/ftab024).
+
+```
+## method 1
+orthofinder -f ./FAA_files/ -t 4 -S blast ## FAA_files being a directory with .faa files from all specimens of interest
+
+## method 2
+### BLASTn
+makeblastdb -in $ech-genome.fasta -dbtype nucl -out $ech_db
+blastn -query queries_gene.fasta -outfmt "6 qseqid sseqid sseq qlen pident nident mismatch evalue sstart send gapopen" -perc_identity 30 -out queries-gene-blastn_vs_$ech.out -db $ech_db -num_threads 6
+
+### BLASTp
+makeblastdb -in $ech-genome.faa -dbtype prot -out $ech_db
+blastp -query queries_prot.fasta -outfmt "6 qseqid sseqid sseq qlen pident nident mismatch evalue sstart send gapopen" -evalue 1e-1 -out queries-protein-blastp_vs_$ech.out -db $ech_db -num_threads 6
+
+### tBLASTn
+makeblastdb -in $ech-genome.fasta -dbtype nucl -out $ech_db
+tblastn -query queries_prot.fasta -outfmt "6 qseqid sseqid sseq qlen pident nident mismatch evalue sstart send gapopen" -evalue 1e-1 -out queries-prot-tblastn_vs_$ech.out -db $ech_db -num_threads 6
+```
