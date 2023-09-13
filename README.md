@@ -106,7 +106,35 @@ miComplete set.tab --hmms Bact105 #set.tab a tabular separated file containing p
 ```
 ```
 Results are:
+## With Quast
+Assembly                    Ecaj-Matoury  Aama-PetiSaut   Aspa-Sparouine 
+# contigs (>= 0 bp)         1        81       117    
+# contigs (>= 1000 bp)      1        81       117    
+# contigs (>= 5000 bp)      1        47       62     
+# contigs (>= 10000 bp)     1        32       42     
+# contigs (>= 25000 bp)     1        16       12     
+# contigs (>= 50000 bp)     1        5        0      
+Total length (>= 0 bp)      1177323  1176232  1187243
+Total length (>= 1000 bp)   1177323  1176232  1187243
+Total length (>= 5000 bp)   1177323  1122570  1068187
+Total length (>= 10000 bp)  1177323  1012570  917159 
+Total length (>= 25000 bp)  1177323  730933   441829 
+Total length (>= 50000 bp)  1177323  364916   0      
+# contigs                   1        81       117    
+Largest contig              1177323  112391   49298  
+Total length                1177323  1176232  1187243
+GC (%)                      32.08    50.62    49.25  
+N50                         1177323  30968    20180  
+N75                         1177323  18795    11467  
+L50                         1        11       19     
+L75                         1        24       40     
+# N's per 100 kbp           0.00     0.00     0.00   
 
+## With miComplete
+Name	Length	GC-content	Present Markers	Completeness	Redundancy	Contigs	N50	L50	N90	L90
+AcajEhr	1177323	32.08	95	0.9048	1.0842	1	1177323	1	117732311410	
+BTR250	1176232	50.61	100	0.9524	1.0000	81	30968	11	7853	38
+ORP110	1187243	49.23	101	0.9619	1.0099	117	20180	19	4879	63
 ```
 
 ## 1.4. Annotation and pseudogene identification
