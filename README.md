@@ -138,14 +138,11 @@ ORP110	1187243	49.23	101	0.9619	1.0099	117	20180	19	4879	63
 ```
 
 ## 1.4. Annotation and pseudogene identification
-The MAGs were annotated using `Prokka` (https://github.com/tseemann/prokka, Seemann T. (2014) Prokka: rapid prokaryotic genome annotation. Bioinformatics. doi: 10.1093/bioinformatics/btu153).
+The MAGs were annotated using `Prokka` (https://github.com/tseemann/prokka, Seemann T. (2014) Prokka: rapid prokaryotic genome annotation. Bioinformatics. doi: 10.1093/bioinformatics/btu153), then outpus are analyzed through `pseudofinder` (https://github.com/filip-husnik/pseudofinder, Syberg-Olsen M.J., Graber A.I., Keeling P.J., McCutcheon J.P., Husnik F. (2022) Pseudofinder: detection of pseudogenes in prokaryotic genomes. Molecular Biology and Evolution. doi: 10.1093/molbev/msac153.). Previously, database based on `$ech.fna` of each MAG were created using `diamond` (https://github.com/bbuchfink/diamond, Buchfink B., Reuter K., Drost H.G. (2021) Sensitive protein alignments at tree-of-life scale using DIAMOND. Nature Methods. doi:10.1038/s41592-021-01101-x). 
 ```
 prokka $ech-MAG.fasta --locustag $ech --prefix $ech --outdir PROKKA-$ech --rfam --compliant
-````
-
-PSEUDOFINDER
-```
-python3 /pseudofinder-1.0/pseudofinder.py annotate --genome <genbank file> --outprefix <prefix> --diamond -db <path to diamond db>
+diamond makedb --in $ech.fna -d $ech_db
+python3 /pseudofinder-1.0/pseudofinder.py annotate --genome $ech.gbk --outprefix $ech --diamond -db $ech_db
 ```
 
 ## 1.5. Genome visualization
@@ -192,7 +189,7 @@ The phylogenetic tree was visualized and modified using figtree (<https://github
 
 ## 2.2. Gene content and nucleic sequences' similarities
 ### Venn diagram 
-Text
+Genome content (orthologs) between MAGs and representatives' genomes of each genus were compared using `OrthoFinder` and the following script to produce a Venn Diagramm on R (v3.6.3) (https://www.R-project.org/, R Core Team. (2020) R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria) and RStudio (http://www.rstudio.com/, RStudio Team. (2020) RStudio: Integrated Development for R. RStudio, PBC, Boston, MA):
 ```
 orthofinder -f ./FAA_files -t 5 -a 1 -S diamond ## FAA_files being a directory including .faa files of all MAg and genome to compare
 
@@ -236,29 +233,29 @@ venn.diagram(Orthologs, filename="Anap_comparison.png", imagetype = "png", heigh
 ```
 
 ### ANI
-With pyani's script `average_nucleotide_identity.py` (https://github.com/widdowquinn/pyani/blob/master/README_v_0_2_x.md)
+Nucleic sequences' similarity matrix was calculated between MAGs and representatives' genomes of each genus using `pyani`'s script `average_nucleotide_identity.py` (https://github.com/widdowquinn/pyani/blob/master/README_v_0_2_x.md) as follows:
 ```
-average_nucleotide_identity.py -i Genomes_fastANI/ -o pyani_results -g ## Genomes_fastANI a directory containing MAGs and genomes of Anaplasmataceae to compare (.fasta)
+average_nucleotide_identity.py -i Genomes_fastANI/ -o pyani_results -g ## Genomes_fastANI a directory containing MAGs and genomes of Anaplasmataceae to compare (.fna)
 ```
 
 ## 2.3. Detection of virulence factors 
-The presence and completeness of genes involved in B vitamins (biotin B7, riboflavin B2, folate B9, pantothenic acid B3, nicotinic acid B3, pyroxidine B6, thiamine B1) and cofactors (FAD, CoA, NADP+) biosynthesis, in heme biosynthesis pathways and in virulence in Vertebrates (potential genes) were investigated by two complementary tools to increase detection of both (potential) functionnal and pseudogenized genes:
+The presence and completeness of genes involved in pathways of interest were investigated by two complementary tools to increase detection of both (potential) functionnal and pseudogenized genes:
 1. Using OrthoFinder
-2. Using BLASTn, BLASTp, and tBLASTn. We also searched these genes in other Rickettsia to compare the presence and functionality patterns. For B vitamins and heme, we used queries from different endosymbionts (Rickettsia, Midichloria, Francisella-like endosymbionts, and Coxiella-like endosymbionts) found on available genomes (GenBank, NCBI). For potential virulence genes, we used queries from R. amblyommatis GAT-30V strain described in Yen et al. (2021) (10.1093/femspd/ftab024).
+2. Using BLASTn, BLASTp, and tBLASTn.
 ```
 ## method 1
-orthofinder -f ./FAA_files/ -t 4 -S blast ## FAA_files being a directory with .faa files from all specimens of interest
+orthofinder -f ./FAA_files/ -t 4 -S blast ## FAA_files being a directory with .faa files from all species of interest, including either the files "Multiquery_Anaplasma-virulence_prot.fasta" or "Multiquery_Ehrlichia-virulence_prot.fasta"
 
 ## method 2
 ### BLASTn
 makeblastdb -in $ech-genome.fasta -dbtype nucl -out $ech_db
-blastn -query queries_gene.fasta -outfmt "6 qseqid sseqid sseq qlen pident nident mismatch evalue sstart send gapopen" -perc_identity 30 -out queries-gene-blastn_vs_$ech.out -db $ech_db -num_threads 6
+blastn -query Multiquery_Anaplasma-virulence_gene.fasta -outfmt "6 qseqid sseqid sseq qlen pident nident mismatch evalue sstart send gapopen" -perc_identity 30 -out queries-gene-blastn_vs_$ech.out -db $ech_db -num_threads 6 ## same with Multiquery_Ehrlichia-virulence_gene.fasta
 
 ### BLASTp
 makeblastdb -in $ech-genome.faa -dbtype prot -out $ech_db
-blastp -query queries_prot.fasta -outfmt "6 qseqid sseqid sseq qlen pident nident mismatch evalue sstart send gapopen" -evalue 1e-1 -out queries-protein-blastp_vs_$ech.out -db $ech_db -num_threads 6
+blastp -query Multiquery_Anaplasma-virulence_prot.fasta -outfmt "6 qseqid sseqid sseq qlen pident nident mismatch evalue sstart send gapopen" -evalue 1e-10 -out queries-protein-blastp_vs_$ech.out -db $ech_db -num_threads 6 ## same with Multiquery_Ehrlichia-virulence_prot.fasta
 
 ### tBLASTn
 makeblastdb -in $ech-genome.fasta -dbtype nucl -out $ech_db
-tblastn -query queries_prot.fasta -outfmt "6 qseqid sseqid sseq qlen pident nident mismatch evalue sstart send gapopen" -evalue 1e-1 -out queries-prot-tblastn_vs_$ech.out -db $ech_db -num_threads 6
+tblastn -query Multiquery_Anaplasma-virulence_prot.fasta -outfmt "6 qseqid sseqid sseq qlen pident nident mismatch evalue sstart send gapopen" -evalue 1e-10 -out queries-prot-tblastn_vs_$ech.out -db $ech_db -num_threads 6 ## same with Multiquery_Ehrlichia-virulence_prot.fasta
 ```
