@@ -158,24 +158,24 @@ java -jar ~/Tools_starters/cgview.jar -i $ech.xml -o map_$ech.png -f png
 
 # Step 2. MAGs' description and comparison with others genomes of Anaplasmataceae
 ## 2.1. Phylogenomics 
-First, single-copy orthologs (SCO) were identified using OrthoFinder (https://github.com/davidemms/OrthoFinder, OrthoFinder: phylogenetic orthology inference for comparative genomics, Emms DM and Kelly S, Genome Biology, 2019, doi: 10.1186/s13059-019-1832-y) from a set of specimens' genomes chosen to study the phylogenetic relationships between the obtained Spiroplasma MAGs and other Spiroplasma representatives:
+First, single-copy orthologs (SCO) were identified using OrthoFinder (https://github.com/davidemms/OrthoFinder, Emms D.M. and Kelly S. (2019) OrthoFinder: phylogenetic orthology inference for comparative genomics. Genome Biology. doi: 10.1186/s13059-019-1832-y) from a set of specimens' genomes chosen to study the phylogenetic relationships between the obtained Spiroplasma MAGs and other Spiroplasma representatives:
 ```
 orthofinder -f ./OrthoFinder_genomes/ -t 4 -S blast ## OrthoFinder_genomes being a directory including all .faa files of specimens of interest
 ```
-For each SCO, sequences were individually aligned using mafft (https://github.com/GSLBiotech/mafft, MAFFT multiple sequence alignment software version 7: improvements in performance and usability, Katoh K and Standley DM, Molecular Biology and Evolution, 2013 doi: 10.1093/molbev/mst010):
+For each SCO, sequences were individually aligned using mafft (https://github.com/GSLBiotech/mafft, Katoh K. and Standley D.M. (213) MAFFT multiple sequence alignment software version 7: improvements in performance and usability. Molecular Biology and Evolution. doi: 10.1093/molbev/mst010):
 ```
 for file in /Single_Copy_Orthologue_Sequences/*
 do mafft "$file" > "$file"
 done
 ```
-For each SCO, ambigious hypervariable regions were removed using trimAl (https://github.com/inab/trimal, trimAl: a tool for automated alignment trimming in large-scale phylogenetic analyses, Capella-Gutiérrez S, Silla-Martínez JM, and Gabaldón T, Bioinformatics, 2009, doi: 10.1093/bioinformatics/btp348):
+For each SCO, ambigious hypervariable regions were removed using trimAl (https://github.com/inab/trimal, Capella-Gutiérrez S., Silla-Martínez J.M., and Gabaldón T. (2009) trimAl: a tool for automated alignment trimming in large-scale phylogenetic analyses. Bioinformatics. doi: 10.1093/bioinformatics/btp348):
 ```
 cp ./Single_Copy_Orthologue_Sequences/*_align.fasta ./Single_Copy_Orthologue_Sequences_trimal/
 for file in /Single_Copy_Orthologue_Sequences_trimal/*
 do trimal -in "$file" -out "$file" -fasta -gt 1 -cons 50
 done
 ```
-Then, all SCO sequences were concatenated using Amas (https://github.com/marekborowiec/AMAS, AMAS: a fast tool for alignment manipulation and computing of summary statistics, Borowiec ML, PeerJ, 2016, doi: 10.7717/peerj.1660) in a single file:
+Then, all SCO sequences were concatenated using Amas (https://github.com/marekborowiec/AMAS, Borowiec M.L. (2016) AMAS: a fast tool for alignment manipulation and computing of summary statistics. PeerJ. doi: 10.7717/peerj.1660) in a single file:
 ```
 for file in /Single_Copy_Orthologue_Sequences_trimal/*
 do awk '/^>/{print ">organism" ++i; next}{print}' < "$file" > "${file%_align.fasta}_rename.fasta"
@@ -183,24 +183,25 @@ done
 cp ./Single_Copy_Orthologue_Sequences_trimal/*_rename.fasta ./Single_Copy_Orthologue_Sequences_AMAS/
 AMAS.py concat -f fasta -d aa --in-files ./Single_Copy_Orthologue_Sequences_AMAS/*.fasta
 ```
-Substitution models were evaluated using modeltest-ng (https://github.com/ddarriba/modeltest, ModelTest-NG: A new and scalable tool for the selection of DNA and protein evolutionary models, Darriba D, Posada D, Kozlov AM, Stamatakis A, Morel B, and Flouri T, Molecular Biology and Evolution, 2020, doi: 10.1093/molbev/msz189) in order to determinate the appropriate substitution model (according to AICc criterion) to use for the phylogenetic tree construction with RAxML (https://github.com/stamatak/standard-RAxML, RAxML version 8: a tool for phylogenetic analysis and post-analysis of large phylogenies, Stamatakis A, Bioinformatics, 2014, doi: 10.1093/bioinformatics/btu033):
+Substitution models were evaluated using modeltest-ng (https://github.com/ddarriba/modeltest, Darriba D., Posada D., Kozlov A.M., Stamatakis A., Morel B., and Flouri T. (2020) ModelTest-NG: A new and scalable tool for the selection of DNA and protein evolutionary models. Molecular Biology and Evolution. doi: 10.1093/molbev/msz189) in order to determinate the appropriate substitution model (according to AICc criterion) to use for the phylogenetic tree construction with RAxML (https://github.com/stamatak/standard-RAxML, Stamatakis A. (2014) RAxML version 8: a tool for phylogenetic analysis and post-analysis of large phylogenies. Bioinformatics. doi: 10.1093/bioinformatics/btu033):
 ```
-modeltest-ng -i Spiro-human_concatenated.faa -p 12 -T raxml -d aa
-raxmlHPC-PTHREADS -T 8 -f a -s Spiro-human_concatenated.faa -n Spiro-phylo -m PROTGAMMAIJTT -x 1234 -# 1000 -p 1234
+modeltest-ng -i SCO_concatenated.faa -p 12 -T raxml -d aa
+raxmlHPC-PTHREADS -T 8 -f a -s SCO_concatenated.faa -n phylo -m PROTGAMMAIJTT -x 1234 -# 1000 -p 1234
 ```
 The phylogenetic tree was visualized and modified using figtree (<https://github.com/rambaut/figtree/>).
 
 ## 2.2. Gene content and nucleic sequences' similarities
 ### Venn diagram 
+Text
 ```
-orthofinder -f ./FAA_Rlusi -t 5 -a 1 -S diamond ## FAA_Rlusi being a directory including .faa files of R. lusitaniae MAGs
+orthofinder -f ./FAA_files -t 5 -a 1 -S diamond ## FAA_files being a directory including .faa files of all MAg and genome to compare
 
 #Ehrlichia
 # On RStudio
 ortho_tab <- read.table("Ehr_GeneCount.txt", sep="\t", header=TRUE, fill=TRUE) 
 ### list of orthologs per each organism in the dataset
-Acaj <- subset(ortho_tab, ortho_tab$Acaj>0)
-Acaj_list <- Acaj$Orthogroup
+Ecaj-Matoury <- subset(ortho_tab, ortho_tab$Acaj>0)
+Ecaj-Matoury_list <- Ecaj-Matoury$Orthogroup
 Ehrcani <- subset(ortho_tab, ortho_tab$Ehrcani>0)
 Ehrcani_list <- Ehrcani$Orthogroup
 Ehrchaff <- subset(ortho_tab, ortho_tab$Ehrchaff>0)
@@ -209,11 +210,10 @@ Ehrmuri <- subset(ortho_tab, ortho_tab$Ehrmuri>0)
 Ehrmuri_list <- Ehrmuri$Orthogroup
 Ehrrumi <- subset(ortho_tab, ortho_tab$Ehrrumi>0)
 Ehrrumi_list <- Ehrrumi$Orthogroup
-Orthologs <- list(Acaj = Acaj_list, Ehrcani = Ehrcani_list, Ehrchaff = Ehrchaff_list, Ehrmuri = Ehrmuri_list, Ehrrumi = Ehrrumi_list) ## create a list of lists
-
+Orthologs <- list(Ecaj-Matoury = Ecaj-Matoury_list, Ehrcani = Ehrcani_list, Ehrchaff = Ehrchaff_list, Ehrmuri = Ehrmuri_list, Ehrrumi = Ehrrumi_list) ## create a list of lists
 library(VennDiagram)
 set.seed(1)
-venn.diagram(Orthologs, filename="Ehr_comparison.png", imagetype = "png", height=2000, width=2000, cex=0.8, cat.cex=0.8, fill=c("#22780F", "#CECECE", "#798081","#C1BFB1", "#BBACAC"), col="black", lwd=1, cat.dist=0.25) # change height, width, color 
+venn.diagram(Orthologs, filename="Ehr_comparison.png", imagetype = "png", height=2000, width=2000, cex=0.8, cat.cex=0.8, col="black", lwd=1, cat.dist=0.25)
 
 #Anaplasma
 # On RStudio
@@ -225,15 +225,14 @@ Aphago <- subset(ortho_tab, ortho_tab$Aphago>0)
 Aphago_list <- Aphago$Orthogroup
 Aplaty <- subset(ortho_tab, ortho_tab$Aplaty>0)
 Aplaty_list <- Aplaty$Orthogroup
-BTR250 <- subset(ortho_tab, ortho_tab$BTR250>0)
-BTR250_list <- BTR250$Orthogroup
-ORP110 <- subset(ortho_tab, ortho_tab$ORP110>0)
-ORP110_list <- ORP110$Orthogroup
-Orthologs <- list(ORP110 = ORP110_list, Amargi = Amargi_list, Aphago = Aphago_list, Aplaty = Aplaty_list, BTR250 = BTR250_list) ## create a list of lists
-
+Aama-PetitSaut <- subset(ortho_tab, ortho_tab$Aama-PetitSaut>0)
+Aama-PetitSaut_list <- Aama-PetitSaut$Orthogroup
+Aspa-Sparouine <- subset(ortho_tab, ortho_tab$Aspa-Sparouine>0)
+Aspa-Sparouine_list <- Aspa-Sparouine$Orthogroup
+Orthologs <- list(Aspa-Sparouine = Aspa-Sparouine_list, Amargi = Amargi_list, Aphago = Aphago_list, Aplaty = Aplaty_list, Aama-PetitSaut = Aama-PetitSaut_list) ## create a list of lists
 library(VennDiagram)
 set.seed(1)
-venn.diagram(Orthologs, filename="Anap_comparison.png", imagetype = "png", height=2000, width=2000, cex=0.8, cat.cex=0.8, fill=c("#CF0A1D", "#CECECE", "#798081","#C1BFB1","#318CE7"), col="black", lwd=1, cat.dist=0.25) # change height, width, color 
+venn.diagram(Orthologs, filename="Anap_comparison.png", imagetype = "png", height=2000, width=2000, cex=0.8, cat.cex=0.8, col="black", lwd=1, cat.dist=0.25)
 ```
 
 ### ANI
@@ -246,7 +245,6 @@ average_nucleotide_identity.py -i Genomes_fastANI/ -o pyani_results -g ## Genome
 The presence and completeness of genes involved in B vitamins (biotin B7, riboflavin B2, folate B9, pantothenic acid B3, nicotinic acid B3, pyroxidine B6, thiamine B1) and cofactors (FAD, CoA, NADP+) biosynthesis, in heme biosynthesis pathways and in virulence in Vertebrates (potential genes) were investigated by two complementary tools to increase detection of both (potential) functionnal and pseudogenized genes:
 1. Using OrthoFinder
 2. Using BLASTn, BLASTp, and tBLASTn. We also searched these genes in other Rickettsia to compare the presence and functionality patterns. For B vitamins and heme, we used queries from different endosymbionts (Rickettsia, Midichloria, Francisella-like endosymbionts, and Coxiella-like endosymbionts) found on available genomes (GenBank, NCBI). For potential virulence genes, we used queries from R. amblyommatis GAT-30V strain described in Yen et al. (2021) (10.1093/femspd/ftab024).
-
 ```
 ## method 1
 orthofinder -f ./FAA_files/ -t 4 -S blast ## FAA_files being a directory with .faa files from all specimens of interest
