@@ -259,3 +259,5 @@ blastp -query Multiquery_Anaplasma-virulence_prot.fasta -outfmt "6 qseqid sseqid
 makeblastdb -in $ech-genome.fasta -dbtype nucl -out $ech_db
 tblastn -query Multiquery_Anaplasma-virulence_prot.fasta -outfmt "6 qseqid sseqid sseq qlen pident nident mismatch evalue sstart send gapopen" -evalue 1e-10 -out queries-prot-tblastn_vs_$ech.out -db $ech_db -num_threads 6 ## same with Multiquery_Ehrlichia-virulence_prot.fasta
 ```
+
+The visualization of the structure of Anaplasma msp2 operon and Ehrlichia omp-1/p28 proteins were produced using genoplotR.
