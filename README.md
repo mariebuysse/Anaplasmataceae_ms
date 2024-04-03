@@ -1,4 +1,7 @@
 # Novel *Anaplasma* and *Ehrlichia* bacteria in humans, wildlife, and ticks in the Amazon rainforest, Buysse et al., Nat. Comm. 
+
+Release v1.1: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10911529.svg)](https://doi.org/10.5281/zenodo.10911529)  
+
 # Bioinformatic analyses and scripts
 
 For this study, we aimed to retrieve the MAG (Metagenome-Assembled Genome) of three Anaplasmataceae detected in humans, sloths, and ticks in French Guiana. We characterized the newly obtained MAGs, then compared them to other representative *Anaplasma* and *Ehrlichia* genomes, especially in the search of homologs of virulence effectors.
