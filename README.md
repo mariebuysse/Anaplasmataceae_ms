@@ -1,6 +1,7 @@
 # Novel *Anaplasma* and *Ehrlichia* bacteria in humans, wildlife, and ticks in the Amazon rainforest, Buysse et al., Nat. Comm. 
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10911529.svg)](https://doi.org/10.5281/zenodo.10911529)  
+See article : [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10911529.svg)](https://doi.org/10.1038/s41467-024-48459-y)  
 
 # Bioinformatic analyses and scripts
 
